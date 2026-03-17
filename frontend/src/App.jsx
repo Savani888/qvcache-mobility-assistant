@@ -71,6 +71,18 @@ function App() {
                   CACHE {result.cache_status}
                 </span>
                 
+                <p style={{ 
+                  fontSize: '0.9rem', 
+                  color: 'var(--text-muted)', 
+                  background: 'var(--glass)', 
+                  padding: '1rem', 
+                  borderRadius: '0.75rem', 
+                  marginBottom: '1.5rem',
+                  borderLeft: `4px solid ${result.cache_status === 'HIT' ? 'var(--accent-green)' : 'var(--accent-red)'}`
+                }}>
+                  <strong>Note:</strong> {result.explanation}
+                </p>
+
                 <h2 style={{ marginBottom: '0.5rem', color: 'var(--primary)' }}>
                   {result.response.mode}
                 </h2>

@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 class SemanticCache:
-    def __init__(self, model_name='all-MiniLM-L6-v2', threshold=0.85):
+    def __init__(self, model_name='all-MiniLM-L6-v2', threshold=0.8):
         self.model = SentenceTransformer(model_name)
         self.threshold = threshold
         self.cache = [] # List of dicts: {'query': str, 'embedding': tensor, 'response': dict, 'timestamp': float}
@@ -15,21 +15,22 @@ class SemanticCache:
         query_embedding = self.model.encode(query, convert_to_tensor=True)
         
         best_score = -1
-        best_response = None
+        best_match = None
 
         for entry in self.cache:
             score = util.cos_sim(query_embedding, entry['embedding']).item()
             if score > best_score:
                 best_score = score
-                best_response = entry['response']
+                best_match = entry
 
         if best_score >= self.threshold:
             self.hit_count += 1
+            explanation = f"Response reused from a similar past query: '{best_match['query']}'"
             return {
                 'status': 'HIT',
-                'response': best_response,
+                'response': best_match['response'],
                 'similarity': round(best_score, 4),
-                'latency': 0.0 # Placeholder, will be calculated in main
+                'explanation': explanation
             }
         
         self.miss_count += 1
