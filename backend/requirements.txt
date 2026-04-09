@@ -1,9 +1,0 @@
-fastapi
-uvicorn
-sentence-transformers
-numpy
-pydantic
-python-multipart
-torch
-groq
-python-dotenv
